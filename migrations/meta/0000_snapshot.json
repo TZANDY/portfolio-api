@@ -81,13 +81,6 @@
           "notNull": true,
           "autoincrement": true
         },
-        "project_id": {
-          "name": "project_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
         "name": {
           "name": "name",
           "type": "text",
@@ -97,10 +90,41 @@
         }
       },
       "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "technologies_name_unique": {
+          "name": "technologies_name_unique",
+          "columns": [
+            "name"
+          ]
+        }
+      },
+      "checkConstraints": {}
+    },
+    "project_technologies": {
+      "name": "project_technologies",
+      "columns": {
+        "project_id": {
+          "name": "project_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "technology_id": {
+          "name": "technology_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
       "foreignKeys": {
-        "technologies_project_id_projects_id_fk": {
-          "name": "technologies_project_id_projects_id_fk",
-          "tableFrom": "technologies",
+        "project_technologies_project_id_projects_id_fk": {
+          "name": "project_technologies_project_id_projects_id_fk",
+          "tableFrom": "project_technologies",
           "tableTo": "projects",
           "columnsFrom": [
             "project_id"
@@ -108,11 +132,32 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "project_technologies_technology_id_technologies_id_fk": {
+          "name": "project_technologies_technology_id_technologies_id_fk",
+          "tableFrom": "project_technologies",
+          "tableTo": "technologies",
+          "columnsFrom": [
+            "technology_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "project_technologies_project_id_technology_id_pk": {
+          "name": "project_technologies_project_id_technology_id_pk",
+          "columns": [
+            "project_id",
+            "technology_id"
+          ]
+        }
+      },
       "uniqueConstraints": {},
       "checkConstraints": {}
     }

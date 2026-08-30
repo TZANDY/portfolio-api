@@ -11,7 +11,14 @@ CREATE TABLE `projects` (
 --> statement-breakpoint
 CREATE TABLE `technologies` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`project_id` integer,
 	`name` text NOT NULL,
-	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE no action
+	UNIQUE (`name`)
+);
+--> statement-breakpoint
+CREATE TABLE `project_technologies` (
+	`project_id` integer NOT NULL,
+	`technology_id` integer NOT NULL,
+	PRIMARY KEY (`project_id`, `technology_id`),
+	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`technology_id`) REFERENCES `technologies`(`id`) ON UPDATE no action ON DELETE cascade
 );

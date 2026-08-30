@@ -1,5 +1,4 @@
-import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const projects = sqliteTable('projects', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -14,6 +13,16 @@ export const projects = sqliteTable('projects', {
 
 export const technologies = sqliteTable('technologies', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  projectId: integer('project_id').references(() => projects.id),
-  name: text('name').notNull(),
+  name: text('name').notNull().unique(),
 });
+
+export const projectTechnologies = sqliteTable('project_technologies', {
+  projectId: integer('project_id')
+   .notNull()
+   .references(() => projects.id, { onDelete: 'cascade' }),
+  technologyId: integer('technology_id')
+   .notNull()
+   .references(() => technologies.id, { onDelete: 'cascade' }),
+}, (table) => ({
+  pk: primaryKey({ columns: [table.projectId, table.technologyId] }),
+}));
