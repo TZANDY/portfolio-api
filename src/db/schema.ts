@@ -16,13 +16,28 @@ export const technologies = sqliteTable('technologies', {
   name: text('name').notNull().unique(),
 });
 
-export const projectTechnologies = sqliteTable('project_technologies', {
-  projectId: integer('project_id')
-   .notNull()
-   .references(() => projects.id, { onDelete: 'cascade' }),
-  technologyId: integer('technology_id')
-   .notNull()
-   .references(() => technologies.id, { onDelete: 'cascade' }),
-}, (table) => ({
-  pk: primaryKey({ columns: [table.projectId, table.technologyId] }),
-}));
+export const projectTechnologies = sqliteTable(
+  'project_technologies',
+  {
+    projectId: integer('project_id')
+      .notNull()
+      .references(() => projects.id, { onDelete: 'cascade' }),
+
+    technologyId: integer('technology_id')
+      .notNull()
+      .references(() => technologies.id, { onDelete: 'cascade' }),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.projectId, table.technologyId],
+    }),
+  ]
+);
+
+export type SelectProject = typeof projects.$inferSelect;
+export type SelectTechnologies = typeof technologies.$inferSelect;
+export type SelectProjectTechnologies = typeof projectTechnologies.$inferSelect;
+
+export type InsertProject = typeof projects.$inferInsert;
+export type InsertTechnologies = typeof technologies.$inferInsert;
+export type InsertProjectTechnologies = typeof projectTechnologies.$inferInsert;
