@@ -4,7 +4,12 @@ import projectsRouter from '../routes/projects';
 import technologiesRouter from '../routes/technologies';
 import projectsTechnologiesRouter from '../routes/projectsTechnologies';
 
-const app = new Hono<{ Bindings: Env }>();
+type Bindings = {
+  DATABASE_URL: string;
+  DATABASE_AUTH_TOKEN: string;
+};
+
+const app = new Hono<{ Bindings: Bindings }>();
 
 // const CLIENT_API_KEY = process.env.CLIENT_API_KEY;
 
