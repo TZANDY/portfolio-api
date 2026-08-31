@@ -8,10 +8,10 @@ const app = new Hono<{ Bindings: Env }>();
 
 // const CLIENT_API_KEY = process.env.CLIENT_API_KEY;
 
-app.use('*', cors({ 
-    origin: 'https://www.andiis.dev',
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] 
-}));
+// app.use('*', cors({ 
+//     origin: 'https://www.andiis.dev',
+//     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'] 
+// }));
 
 app.get("/api/", (c) => c.json({ name: "Cloudflare" }));
 
