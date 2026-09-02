@@ -17,30 +17,54 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 // const CLIENT_API_KEY = process.env.CLIENT_API_KEY;
 
-app.use('/*', cors({ 
-    origin: (origin,c)=>{
+app.use(
+  "/api/*",
+  cors({
+    origin: (origin, c) => {
+      // Requests sin Origin, por ejemplo algunos requests
+      // directos desde servidor o herramientas.
+      if (!origin) {
+        return "";
+      }
+
+      // Producción
       if (origin === c.env.ALLOWED_ORIGIN_PROD) {
         return origin;
       }
 
-      // if (origin === c.env.ALLOWED_ORIGIN_DEV) {
-      //   return origin;
-      // }
-
+      // Preview específico configurado en Cloudflare
       if (origin === c.env.ALLOWED_ORIGIN_PREVIEW) {
         return origin;
       }
 
-      // Permitir URLs de previsualización (Preview Deployments) de Vercel usando un Regex simple
-      if (origin.match(/^https:\/\/tu-app-.[a-zA-Z0-9-]+-vercel\.app$/)) {
-        return origin
+      // Previews de Vercel de tu proyecto
+      //
+      // Cambia "TU-PROYECTO" por el nombre real del proyecto https://portfolio-react-git-master-andi-infantes-projects.vercel.app/ en Vercel.
+      const vercelPreviewRegex =
+        //^https:\/\/TU-PROYECTO(?:-git-[a-zA-Z0-9._-]+)?(?:-[a-zA-Z0-9._-]+)?\.vercel\.app$/;
+        /^https:\/\/portfolio-react-git-master-andi-infantes-projects.vercel.app$/;
+
+      if (vercelPreviewRegex.test(origin)) {
+        return origin;
       }
 
-      return '';
+      return "";
     },
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-}));
+
+    allowMethods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+      "OPTIONS",
+    ],
+
+    allowHeaders: [
+      "Content-Type",
+      "Authorization",
+    ],
+  })
+);
 
 app.get("/api/", (c) => c.json({ name: "Cloudflare" }));
 
